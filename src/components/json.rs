@@ -5,6 +5,7 @@ use crate::{
 };
 
 
+#[derive(Debug)]
 pub struct JSON(String);
 impl<'d> JSON {
     pub fn from_struct<S: Serialize>(value: &S) -> Context<Self> {
@@ -14,7 +15,7 @@ impl<'d> JSON {
         Ok(serde_json::from_str(&self.0)?)
     }
 
-    pub(crate) fn from_str_unchecked(str: &'static str) -> Self {
+    pub(crate) fn from_str_unchecked(str: &str) -> Self {
         Self(str.to_owned())
     }
     pub(crate) fn content_length(&self) -> usize {

@@ -7,14 +7,16 @@ use crate::{
     components::{
         status::Status,
         json::JSON
-    },
+    }, server::Server,
 };
 
 
+#[derive(Debug)]
 pub struct Response {
     status: Status,
     body:   Body,
 }
+    #[derive(Debug)]
     #[allow(non_camel_case_types)]
     enum Body {
         json(JSON),
@@ -56,6 +58,17 @@ Keep-Alive: timeout=5
             self.body.content_length(),
             self.body.response_format(),
         ).as_bytes())
+    }
+
+
+    #[allow(non_snake_case)]
+    pub(crate) fn SetUpError(messages: &Vec<String>) -> Context<Server> {
+        Err(Self {
+            status: Status::SetUpError,
+            body:   Body::text(messages.iter().fold(
+                String::new(), |a, b| a + b + "\n"
+            ))
+        })
     }
 
     #[allow(non_snake_case)]
