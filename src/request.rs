@@ -5,11 +5,17 @@ use crate::{
 };
 
 
-pub struct Request {
+pub struct Request<'str> {
     // pub headers: Vec<HeaderOfReq>,
-    pub(crate) body:    Option<JSON>,
+    pub param:       Option<&'str str>, // PathParam<'str>,
+    pub(crate) body: Option<JSON>,
 }
-impl<'d> Request {
+// enum PathParam<'str> {
+//     Int(isize),
+//     Str(&'str str),
+// }
+
+impl<'d, 'str> Request<'str> {
     pub fn get_body<D: Deserialize<'d>>(&'d self) -> Context<Option<D>> {
         let Some(json) = &self.body else {
             return Ok(None)

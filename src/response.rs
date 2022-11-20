@@ -7,7 +7,7 @@ use crate::{
     components::{
         status::Status,
         json::JSON
-    }, server::Server,
+    },
 };
 
 
@@ -62,7 +62,7 @@ Keep-Alive: timeout=5
 
 
     #[allow(non_snake_case)]
-    pub(crate) fn SetUpError(messages: &Vec<String>) -> Context<Server> {
+    pub(crate) fn SetUpError(messages: &Vec<String>) -> Context<()> {
         Err(Self {
             status: Status::SetUpError,
             body:   Body::text(messages.iter().fold(

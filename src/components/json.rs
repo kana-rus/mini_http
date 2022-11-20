@@ -28,3 +28,9 @@ impl ResponseFormat for JSON {
         self.0.as_str()
     }
 }
+
+impl From<&'static str> for JSON {
+    fn from(value: &'static str) -> Self {
+        Self(value.to_owned())
+    }
+}

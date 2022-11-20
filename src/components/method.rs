@@ -6,6 +6,7 @@ use crate::{
 };
 
 
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub(crate) enum Method {
     GET,
     POST,
