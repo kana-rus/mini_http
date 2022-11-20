@@ -14,11 +14,10 @@ struct User {
 }
 
 fn post_user(req: Request) -> Context<Response> {
-    let new_user = req.get_body::<User>()?
-        .ok_or_else(|| Response::BadRequest("expected request body"))?;
+    let new_user = req.get_body::<User>()?;
     
     // record the user info into DB...
-    
+
     let created_user = new_user;
 
     Response::OK(
