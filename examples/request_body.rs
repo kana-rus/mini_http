@@ -16,10 +16,9 @@ struct User {
 fn post_user(req: Request) -> Context<Response> {
     let new_user = req.get_body::<User>()?;
     
-    // record the user info into DB...
+    // actually, record the user info into DB here...
 
-    let created_user = new_user;
-
+    let created_user = new_user;  // for simplifying this demo
     Response::OK(
         JSON::from_struct(&created_user)?
     )

@@ -2,6 +2,8 @@ use std::{
     net::TcpStream,
     io::Write
 };
+use chrono::Utc;
+
 use crate::{
     context::Context,
     components::{
@@ -43,23 +45,21 @@ impl ResponseFormat for Body {
     }
 }
 
-// trait ContextArg {}
-// impl ContextArg for Response {}
-// impl ContextArg for () {}
-
 impl Response {
     pub(crate) fn write_to_stream(self, stream: &mut TcpStream) -> std::io::Result<usize> {
         stream.write(format!(
 "HTTP/1.1 {}
+Connection: Keep-Alive
 Content-Type: {}; charset=utf-8
 Content-Length: {}
-Connection: Keep-Alive
+Date: {}
 Keep-Alive: timeout=5
 
 {}",
             self.status.response_format(),
             self.status.content_type(),
             self.body.content_length(),
+            Utc::now().to_rfc2822(),
             self.body.response_format(),
         ).as_bytes())
     }
