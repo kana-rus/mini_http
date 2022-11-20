@@ -37,24 +37,28 @@ impl<'method, 'path> ServerSetting<'method, 'path> {
         server.serve_on(tcp_address)
     }
 
+    #[allow(non_snake_case)]
     pub fn GET(&mut self,
         path_string: &'static str,
         handler:     fn(Request) -> Context<Response>,
     ) -> &mut Self {
         self.add_handler(&Method::GET, path_string, handler)
     }
+    #[allow(non_snake_case)]
     pub fn POST(&mut self,
         path_string: &'static str,
         handler:     fn(Request) -> Context<Response>,
     ) -> &mut Self {
         self.add_handler(&Method::POST, path_string, handler)
     }
+    #[allow(non_snake_case)]
     pub fn PATCH(&mut self,
         path_string: &'static str,
         handler:     fn(Request) -> Context<Response>,
     ) -> &mut Self {
         self.add_handler(&Method::PATCH, path_string, handler)
     }
+    #[allow(non_snake_case)]
     pub fn DELETE(&mut self,
         path_string: &'static str,
         handler:     fn(Request) -> Context<Response>,

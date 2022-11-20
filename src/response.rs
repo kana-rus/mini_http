@@ -45,10 +45,6 @@ impl ResponseFormat for Body {
     }
 }
 
-// trait ContextArg {}
-// impl ContextArg for Response {}
-// impl ContextArg for () {}
-
 impl Response {
     pub(crate) fn write_to_stream(self, stream: &mut TcpStream) -> std::io::Result<usize> {
         stream.write(format!(
