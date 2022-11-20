@@ -24,14 +24,6 @@ impl Method {
             _ => Err(Response::BadRequest(format!("invalid request method: `{string}`"))),
         }
     }
-    pub(crate) fn index(&self) -> usize {
-        match self {
-            Self::GET => 0,
-            Self::POST => 1,
-            Self::PATCH => 2,
-            Self::DELETE => 3,
-        }
-    }
 }
 
 impl Display for Method {
