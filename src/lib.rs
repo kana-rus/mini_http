@@ -13,3 +13,12 @@ pub use self::{
     response::Response,
     components::json::JSON,
 };
+pub mod prelude {
+    pub use super::{
+        server::Server,
+        context::Context,
+        request::Request,
+        response::Response,
+        components::json::JSON,
+    };
+}

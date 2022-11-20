@@ -1,11 +1,4 @@
-use mini_http::{
-    JSON,
-    Server,
-    Context,
-    Request,
-    Response,
-};
-
+use mini_http::prelude::*;
 
 fn main() -> Context<()> {
     Server::setup()

@@ -78,6 +78,7 @@ impl<'method, 'path> ServerSetting<'method, 'path> {
                 (path_string, false)
             };
 
+        
         if self.map.insert(
             (method, &path, has_param), handler
         ).is_some() {
@@ -102,25 +103,8 @@ impl<'method, 'path> Server<'method, 'path> {
             let mut buffer = [b' '; BUF_SIZE];
             stream.read(&mut buffer)?;
 
-            let (method, path_str, mut request) = parse_stream(&buffer)?;
-
-            let handler = 
-                if let Some(handler) = self.0.get(&(&method, path_str, false)) {
-                    handler
-                } else {
-                    let (path, param) = path_str.rsplit_once('/')
-                        .ok_or_else(|| Response::BadRequest::<String, ()>(format!(
-                            "invalid request path format: {path_str}"
-                        )).unwrap_err())?;
-                    let handler = self.0.get(&(&method, path, true))
-                        .ok_or_else(|| Response::BadRequest::<String, ()>(format!(
-                            "handler for `{method} {path_str}` is not found"
-                        )).unwrap_err())?;
-                    request.param = Some(param);
-                    handler
-                };
-
-            match handler(request) {
+            let (method, path_str, request) = parse_stream(&buffer)?;
+            match self.handle_request(method, path_str, request) {
                 Ok(res)  => res,
                 Err(res) => res,
             }.write_to_stream(
@@ -130,5 +114,36 @@ impl<'method, 'path> Server<'method, 'path> {
         }
 
         Ok(())
+    }
+
+    fn handle_request(&self,
+        method:      Method,
+        path_str:    &'path str,
+        mut request: Request<'path>,
+    ) -> Context<Response> {
+        let handler = 
+                if let Some(handler) = self.0.get(&(&method, path_str, false)) {
+                    handler
+                } else {
+                    let (path, param) = path_str.rsplit_once('/')
+                        .ok_or_else(|| Response::BadRequest(format!(
+                            "invalid request path format: {path_str}"
+                        )))?;
+                    let handler = self.0.get(&(&method, path, true))
+                        .ok_or_else(||
+                            if let Some(_) = self.0.get(&(&method, path_str, true)) {
+                                Response::BadRequest(format!(
+                                    "expected a path parameter"
+                                ))
+                            } else {
+                                Response::NotFound(format!(
+                                    "handler for `{method} {path_str}` is not found"
+                                ))
+                            }
+                        )?;
+                    request.param = Some(param);
+                    handler
+                };
+        handler(request)
     }
 }

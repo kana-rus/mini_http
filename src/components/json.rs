@@ -29,8 +29,8 @@ impl ResponseFormat for JSON {
     }
 }
 
-impl From<&'static str> for JSON {
-    fn from(value: &'static str) -> Self {
-        Self(value.to_owned())
+impl<S: ToString> From<S> for JSON {
+    fn from(value: S) -> Self {
+        Self(value.to_string())
     }
 }

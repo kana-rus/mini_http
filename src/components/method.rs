@@ -21,7 +21,7 @@ impl Method {
             "POST"   => Ok(Self::POST),
             "PATCH"  => Ok(Self::PATCH),
             "DELETE" => Ok(Self::DELETE),
-            _ => Response::BadRequest(format!("invalid request method: `{string}`"))
+            _ => Err(Response::BadRequest(format!("invalid request method: `{string}`"))),
         }
     }
     pub(crate) fn index(&self) -> usize {

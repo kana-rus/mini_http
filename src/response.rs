@@ -43,6 +43,10 @@ impl ResponseFormat for Body {
     }
 }
 
+// trait ContextArg {}
+// impl ContextArg for Response {}
+// impl ContextArg for () {}
+
 impl Response {
     pub(crate) fn write_to_stream(self, stream: &mut TcpStream) -> std::io::Result<usize> {
         stream.write(format!(
@@ -79,31 +83,31 @@ Keep-Alive: timeout=5
         })
     }
     #[allow(non_snake_case)]
-    pub fn NotFound<Msg: ToString, T>(msg: Msg) -> Context<T> {
-        Err(Self {
+    pub fn NotFound<Msg: ToString>(msg: Msg) -> Self {
+        Self {
             status: Status::NotFound,
             body:   Body::text(msg.to_string()),
-        })
+        }
     }
     #[allow(non_snake_case)]
-    pub fn BadRequest<Msg: ToString, T>(msg: Msg) -> Context<T> {
-        Err(Self {
-            status:  Status::BadRequest,
-            body:    Body::text(msg.to_string()),
-        })
+    pub fn BadRequest<Msg: ToString>(msg: Msg) -> Self {
+        Self {
+            status: Status::BadRequest,
+            body:   Body::text(msg.to_string())
+        }
     }
     #[allow(non_snake_case)]
-    pub fn InternalServerError<Msg: ToString, T>(msg: Msg) -> Context<T> {
-        Err(Self {
+    pub fn InternalServerError<Msg: ToString>(msg: Msg) -> Self {
+        Self {
             status:  Status::InternalServerError,
             body:    Body::text(msg.to_string()),
-        })
+        }
     }
     #[allow(non_snake_case)]
-    pub fn NotImplemented<Msg: ToString, T>(msg: Msg) -> Context<T> {
-        Err(Self {
+    pub fn NotImplemented<Msg: ToString>(msg: Msg) -> Self {
+        Self {
             status:  Status::NotImplemented,
             body:    Body::text(msg.to_string()),
-        })
+        }
     }
 }
