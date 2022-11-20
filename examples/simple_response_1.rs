@@ -1,8 +1,9 @@
 use mini_http::{
-    request::Request,
-    context::Context,
-    response::Response,
-    components::json::JSON, server::Server
+    JSON,
+    Server,
+    Context,
+    Request,
+    Response,
 };
 
 
